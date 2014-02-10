@@ -112,6 +112,7 @@ public class Pong extends GameFrame implements GameState, ActionListener{
         public void paintComponent(Graphics g) {
             g.fillRect(p1.getX(), p1.getY(), 10, 40);
             g.fillRect(p2.getX(), p2.getY(), 10, 40);
+            //lol
         }
     }
 }
