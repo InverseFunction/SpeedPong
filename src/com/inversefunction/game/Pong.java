@@ -13,7 +13,6 @@ import javax.swing.Timer;
 import javax.swing.JPanel;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 public class Pong extends GameFrame implements GameState, ActionListener{
     
