@@ -13,12 +13,15 @@ import javax.swing.Timer;
 import javax.swing.JPanel;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Random;
 
 public class Pong extends GameFrame implements GameState, ActionListener{
     
     public GameStateManager gsm;
     public Timer timer;
     public JPanel panel;
+    
+    public Random r = new Random();
     
     public Map<String, int[]> coords = new HashMap<>();
     
@@ -75,6 +78,7 @@ public class Pong extends GameFrame implements GameState, ActionListener{
         timer.start();
         addFrame(new DrawPanel(this));
         createObjects();
+        initBall();
     }
     
     @Override
@@ -104,6 +108,12 @@ public class Pong extends GameFrame implements GameState, ActionListener{
         a[DY] = 0;
         return a;
     }
+    public void initBall() {
+        int[] a = coords.get("BALL");
+        a[DX] = r.nextInt(10);
+        a[DY] = r.nextInt(10);
+        coords.put("BALL", a);
+    }
     public void move() {
         int[] a = coords.get("PLAYER1");
         if(a[DY] != 0 && onScreen(a[Y])) {
@@ -118,6 +128,12 @@ public class Pong extends GameFrame implements GameState, ActionListener{
             }
         }
         coords.put("PLAYER1", a);
+        int[] c = coords.get("BALL");
+        if((c[DY] != 0 && onScreen(c[Y]) && c[DX] != 0)) {
+            c[X] += c[DX];
+            c[Y] += c[DY];
+        }
+        coords.put("BALL", c);
         
     }
     public int getStartingX(int index) {
