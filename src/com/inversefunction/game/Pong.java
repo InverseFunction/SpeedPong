@@ -5,6 +5,7 @@ import com.inversefunction.state.GameState;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -26,6 +27,8 @@ public class Pong extends GameFrame implements GameState, ActionListener{
     public Map<String, int[]> coords = new HashMap<>();
     
     public String[] entity = {"PLAYER1", "PLAYER2", "BALL" };
+    
+    public DrawPanel dp = new DrawPanel(this);
     
     public int X = 0;
     public int Y = 1;
@@ -76,7 +79,8 @@ public class Pong extends GameFrame implements GameState, ActionListener{
     @Override
     public void start() {
         timer.start();
-        addFrame(new DrawPanel(this));
+        addFrame(dp);
+        this.validate();
         createObjects();
         initBall();
     }
@@ -110,8 +114,7 @@ public class Pong extends GameFrame implements GameState, ActionListener{
     }
     public void initBall() {
         int[] a = coords.get("BALL");
-        a[DX] = r.nextInt(10);
-        a[DY] = r.nextInt(10);
+        a[DX] = -1;
         coords.put("BALL", a);
     }
     public void move() {
@@ -129,9 +132,9 @@ public class Pong extends GameFrame implements GameState, ActionListener{
         }
         coords.put("PLAYER1", a);
         int[] c = coords.get("BALL");
-        if((c[DY] != 0 && onScreen(c[Y]) && c[DX] != 0)) {
+        if(c[DX] != 0 && onScreenX(c[X])) {
             c[X] += c[DX];
-            c[Y] += c[DY];
+            //c[Y] += c[DY];
         }
         coords.put("BALL", c);
         
@@ -172,6 +175,9 @@ public class Pong extends GameFrame implements GameState, ActionListener{
     public int getDeltaY(String key) {
         return coords.get(key)[DY];
     }
+    public boolean onScreenX(int x) {
+        return ((x<=383) && (x>= 0));
+    }
     public boolean onScreen(int y) {
         return ((y<=335)&&(y>=0));
     }
@@ -183,10 +189,14 @@ public class Pong extends GameFrame implements GameState, ActionListener{
         
         @Override
         public void paintComponent(Graphics g) {
+//            super.paint(g);
             Graphics2D g2d = (Graphics2D) g;
             g.fillRect(pong.getX("PLAYER1"), pong.getY("PLAYER1"), 10, 40);
             g.fillRect(pong.getX("PLAYER2"), pong.getY("PLAYER2"), 10, 40);
             g2d.fill(ball);
+            Toolkit.getDefaultToolkit().sync();
+            g2d.dispose();
+            g.dispose();
             
         }
     }
