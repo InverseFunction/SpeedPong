@@ -40,6 +40,32 @@ public class Pong extends GameFrame implements GameState, ActionListener{
     
     public Ball ball;
     
+    public enum Collision {
+        PLAYER1, PLAYER2, NONE
+    }
+    
+    public Collision collision;
+    
+    public Collision getCollision() {
+        return this.collision;
+    }
+    public void setCollision(Collision c) {
+        this.collision = c;
+    }
+    
+    public enum Score {
+        PLAYER1, PLAYER2, NONE
+    }
+    
+    public Score score;
+    
+    public Score getScore() {
+        return this.score;
+    }
+    public void setScore(Score s) {
+        this.score = s;
+    }
+    
     
     public Pong(GameStateManager gsm) {
         super(gsm);
@@ -76,6 +102,7 @@ public class Pong extends GameFrame implements GameState, ActionListener{
         });
     }
     
+    
     @Override
     public void start() {
         timer.start();
@@ -83,6 +110,7 @@ public class Pong extends GameFrame implements GameState, ActionListener{
         this.validate();
         createObjects();
         initBall();
+        initPlayer();
     }
     
     @Override
@@ -94,6 +122,7 @@ public class Pong extends GameFrame implements GameState, ActionListener{
     public void actionPerformed(ActionEvent e) {
         repaint();
         move();
+        player2();
     }
     public void createObjects() {
         for(int i=0;i<entity.length;i++) {
@@ -114,7 +143,7 @@ public class Pong extends GameFrame implements GameState, ActionListener{
     }
     public void initBall() {
         int[] a = coords.get("BALL");
-        a[DX] = -1;
+        a[DX] = -0;
         coords.put("BALL", a);
     }
     public void move() {
@@ -137,6 +166,64 @@ public class Pong extends GameFrame implements GameState, ActionListener{
             //c[Y] += c[DY];
         }
         coords.put("BALL", c);
+        
+    }
+    public void player2() {
+        int[] a = coords.get("PLAYER2");
+        int[] b = coords.get("BALL");
+        a[DY] = b[DY];
+        coords.put("PLAYER2", a);
+    }
+    public void initPlayer() {
+        int[] a = coords.get("PLAYER2");
+        int[] b = coords.get("BALL");
+        a[Y] = b[Y] - 15;
+        coords.put("PLAYER2", a);
+    }
+    public void checkCollision() {
+        int[] a = coords.get("PLAYER1");
+        int[] b = coords.get("PLAYER2");
+        int[] c = coords.get("BALL");
+        if(checkCollision(a,c)) {
+            this.setCollision(Collision.PLAYER1);
+        }
+        if(checkCollision(b, c)) {
+            this.setCollision(Collision.PLAYER2);
+        }
+    }
+    public boolean checkCollision(int[] a, int[] b) {
+        return true;
+    }
+    public void checkCollision(Collision c) {
+        switch(c) {
+            case PLAYER1:
+                
+            break;
+            case PLAYER2:
+                
+            break;
+            case NONE:
+                
+            break;
+        }
+    }
+    public void checkScore() {
+        switch(getScore()) {
+            case PLAYER1:
+                
+            break;
+            case PLAYER2:
+                
+            break;
+            case NONE:
+                
+            break;
+        }
+    }
+    public void playerOneScore() {
+        
+    }
+    public void playerTwoScore() {
         
     }
     public int getStartingX(int index) {
@@ -194,6 +281,8 @@ public class Pong extends GameFrame implements GameState, ActionListener{
             g.fillRect(pong.getX("PLAYER1"), pong.getY("PLAYER1"), 10, 40);
             g.fillRect(pong.getX("PLAYER2"), pong.getY("PLAYER2"), 10, 40);
             g2d.fill(ball);
+            g.setColor(Color.red);
+            g.drawLine(pong.getX("PLAYER2") , pong.getY("PLAYER2") + 20, pong.getX("BALL") + 5, pong.getY("BALL") + 5);
             Toolkit.getDefaultToolkit().sync();
             g2d.dispose();
             g.dispose();
