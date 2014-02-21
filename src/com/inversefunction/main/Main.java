@@ -23,7 +23,10 @@ public class Main {
                 setup();
             break;
             case RUNNING:
-                pong.start();
+                if(!pong.isRunning()) {
+                    System.out.println("lol");
+                    pong.start();
+                }
             break;
             case STOP:
             
